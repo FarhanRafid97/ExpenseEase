@@ -12,7 +12,7 @@ const ButtonLink: React.FC<ButtonLinkProps> = ({ label, to, outlined }) => {
     return (
       <Link to={to}>
         <p
-          className={`px-8 py-3 w-fit border-2 border-purple hover:bg-purple hover:text-white hover:opacity-70 rounded-xl text-sm font-semibold text-purple `}
+          className={`px-8 py-3 w-fit border-2 border-purple hover:bg-purple hover:text-white hover:opacity-70 rounded-xl text-xs md:text-sm font-semibold text-purple `}
         >
           {label}
         </p>
@@ -22,7 +22,7 @@ const ButtonLink: React.FC<ButtonLinkProps> = ({ label, to, outlined }) => {
   return (
     <Link to={to}>
       <p
-        className={`px-8 w-fit py-3 border-2  text-white rounded-xl text-sm font-semibold  border-purple bg-purple hover:opacity-70  `}
+        className={`px-8 w-fit py-3 border-2  text-white rounded-xl text-xs md:text-sm font-semibold  border-purple bg-purple hover:opacity-70  `}
       >
         {label}
       </p>

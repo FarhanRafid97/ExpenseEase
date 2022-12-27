@@ -2,4 +2,9 @@
   background: -webkit-linear-gradient(15deg, #525298, #1ba0f8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  @apply py-2;
+}
+
+.icon-input-style {
+  @apply absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600;
 }
