@@ -1,36 +1,34 @@
-interface IndexProps {}
+import Authentication from '@/components/Authentication/Authentication';
+import { useIsAuth } from '@/hooks/useisAuth';
+import { signout } from '@/service/supabase';
+import { useUser } from '@/store/user';
 import { Link as ReachLink } from 'react-router-dom';
 
-import { useEffect, useState } from 'react';
-import { signout, supabase } from '@/service/supabase';
-import { User, UserMetadata } from '@supabase/supabase-js';
+const Index: React.FC = () => {
+  useIsAuth();
+  const user = useUser((state) => state.user);
 
-type TypeUserMetadata = { picture: string };
-
-const Index: React.FC<IndexProps> = ({}) => {
-  const [user, setUser] = useState<UserMetadata>({});
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      const { user } = data;
-      console.log(user?.user_metadata);
-      if (user?.user_metadata) {
-        setUser(user.user_metadata);
-      }
-    };
-    getUser();
-  }, []);
+  const logout = useUser((state) => state.logout);
+  console.log(null === false);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-      <p>{user.name} </p>
-      <img src={user.picture} alt="" />
-      <div style={{ display: 'flex', gap: '15px' }}>
-        <button onClick={() => signout()}>Logout</button>
-        <ReachLink to="/login">Login</ReachLink>
+    <Authentication>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        <p>{user?.name} </p>
+        <img src={user?.picture} alt="" />
+        <div style={{ display: 'flex', gap: '15px' }}>
+          <button
+            onClick={() => {
+              logout();
+              signout();
+            }}
+          >
+            Logout
+          </button>
+          <ReachLink to="/login">Login</ReachLink>
+        </div>
       </div>
-    </div>
+    </Authentication>
   );
 };
 
