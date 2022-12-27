@@ -1,6 +1,4 @@
 import { createClient } from '@supabase/supabase-js';
-import { SignupUserPayload } from 'expense-app';
-import toast from 'react-hot-toast';
 
 export const supabase = createClient(
   import.meta.env.VITE_APP_SUPABASE_URL,
@@ -13,5 +11,5 @@ export const SignInWithGoogle = async () => {
 };
 
 export async function signout() {
-  const { error } = await supabase.auth.signOut();
+  return await supabase.auth.signOut();
 }
