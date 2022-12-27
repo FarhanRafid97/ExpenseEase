@@ -1,0 +1,5 @@
+.gardient-title {
+  background: -webkit-linear-gradient(15deg, #525298, #1ba0f8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

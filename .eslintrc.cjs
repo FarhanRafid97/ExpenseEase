@@ -24,6 +24,7 @@ module.exports = {
     'prefer-const': 'error',
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
-    '@typescript-eslint/no-extra-semi': 'off'
+    '@typescript-eslint/no-extra-semi': 'off',
+    
   }
 }

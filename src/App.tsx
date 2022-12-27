@@ -1,22 +1,23 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import './App.css';
+import { Suspense, lazy } from 'react';
 
 import { Route, Routes } from 'react-router';
-import Index from '@/pages/Index';
-import Login from '@/pages/Login';
+import Loading from './components/Loading';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const Index = lazy(() => import('./pages').then((m) => ({ default: m.Home })));
+  const Login = lazy(() => import('./pages').then((m) => ({ default: m.Login })));
+  const Test = lazy(() => import('./pages').then((m) => ({ default: m.Test })));
 
   return (
-    <div className="App">
-      <Routes>
-        {' '}
-        <Route path="/" element={<Index />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </div>
+    <Suspense fallback={<Loading />}>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/test" element={<Test />} />
+        </Routes>
+      </div>
+    </Suspense>
   );
 }
 

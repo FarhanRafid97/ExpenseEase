@@ -1,7 +1,6 @@
 import { supabase } from '@/service/supabase';
 import { useUser } from '@/store/user';
-import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const useIsAuth = () => {
   const login = useUser((state) => state.login);
