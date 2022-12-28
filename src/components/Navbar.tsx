@@ -2,10 +2,12 @@ import ButtonLink from './ButtonLink';
 import { Link } from 'react-router-dom';
 import { useUser } from '@/store/user';
 import Avatar from './Avatar';
+import { useIsAuth } from '@/hooks/useisAuth';
 
 const Navbar: React.FC = () => {
+  useIsAuth();
   const user = useUser((state) => state.user);
-  console.log(user);
+
   const SideMenu_jsx = () => {
     if (user === null) {
       return <p>Loading</p>;
@@ -27,7 +29,7 @@ const Navbar: React.FC = () => {
     );
   };
   return (
-    <div className="w-11/12  md:w-9/12 lg:w-8/12 xl:w-7/12 sticky top-0 m-auto  py-4 flex justify-between items-center">
+    <div className="w-11/12  md:w-9/12 lg:w-8/12 xl:w-7/12 m-auto  py-4 flex justify-between items-center">
       <Link to="/">
         <h1 className="text-xl md:text-3xl font-bold gardient-title  ">ExpenseEase</h1>
       </Link>
