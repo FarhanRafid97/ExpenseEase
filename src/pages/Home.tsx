@@ -1,17 +1,11 @@
-import { useIsAuth } from '@/hooks/useisAuth';
 import feature from '@/dummy/feature.json';
-import ButtonLink from '@/components/ButtonLink';
+import ButtonLink from '@/components/Button/ButtonLink';
 
 const Home: React.FC = () => {
-  useIsAuth();
-
   return (
     <div className="flex flex-col gap-[15px]">
-      <div className="text-3xl md:text-[36px] flex gap-2">
-        <h1 className="gardient-title font-bold flex flex-wrap items-center">
-          Welcome To Our Expense Tracking App!
-        </h1>
-      </div>
+      <h1 className="gardient-title ">Welcome To Our Expense Tracking App!</h1>
+
       <div className="flex flex-col gap-4">
         <p className="w-full lg:w-3/4 text-sm md:text-base text-justify font-normal">
           {`At ExpenseEase, we understand how important it is to keep track of your expenses and manage your money. That's why we've created an easy-to-use app that helps you stay on top of your spending and make the most of your income.`}

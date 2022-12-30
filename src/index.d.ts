@@ -11,4 +11,10 @@ declare module 'expense-app' {
     email: string;
     password: string;
   };
+
+  export type InputExpenseData = {
+    expense_name: string;
+    currency: string;
+    amount: string;
+  };
 }

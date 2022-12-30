@@ -2,9 +2,14 @@
   background: -webkit-linear-gradient(15deg, #525298, #1ba0f8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  @apply py-2;
+  @apply py-2 text-3xl md:text-[36px] font-bold;
 }
 
 .icon-input-style {
   @apply absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-600;
+}
+
+.sticky-header {
+  @apply sticky top-0 z-50 translate-y-[var(--header-distance)] bg-white shadow transition-transform 
+  lg:col-span-full lg:translate-y-0;
 }

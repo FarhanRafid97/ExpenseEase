@@ -1,3 +1,4 @@
+import { useIsAuth } from '@/hooks/useisAuth';
 import { motion, Variants } from 'framer-motion';
 import { Outlet } from 'react-router-dom';
 import Footer from './Footer';
@@ -10,9 +11,10 @@ export const variants: Variants = {
 };
 
 const Layout: React.FunctionComponent = () => {
+  useIsAuth();
   return (
     <div className="w-screen ">
-      <div className="w-full sticky top-0 bg-white z-[999] border-b-[0.5px] border-[#dbdbdb] shadow-sm">
+      <div className="w-full sticky  top-0 z-[1] bg-white  border-b-[0.5px] border-[#dbdbdb] shadow-sm">
         <Navbar />
       </div>
       <motion.div
@@ -20,7 +22,7 @@ const Layout: React.FunctionComponent = () => {
         initial="hidden"
         animate="enter"
         exit="exit"
-        className="w-11/12  md:w-9/12 lg:w-8/12 xl:w-7/12 py-4 min-h-[85vh]  m-auto"
+        className="w-11/12 z-20  md:w-9/12 lg:w-8/12 xl:w-7/12 py-4 min-h-[85vh]  m-auto"
       >
         <Outlet />
       </motion.div>

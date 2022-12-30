@@ -1,11 +1,9 @@
-import ButtonLink from './ButtonLink';
+import ButtonLink from './Button/ButtonLink';
 import { Link } from 'react-router-dom';
 import { useUser } from '@/store/user';
 import Avatar from './Avatar';
-import { useIsAuth } from '@/hooks/useisAuth';
 
 const Navbar: React.FC = () => {
-  useIsAuth();
   const user = useUser((state) => state.user);
 
   const SideMenu_jsx = () => {
@@ -22,7 +20,9 @@ const Navbar: React.FC = () => {
     }
     return (
       <div className="flex gap-4 items-center">
-        <p className="text-black font-medium">My Plan</p>
+        <Link to="/my-expense">
+          <p className="text-black font-medium">My Plan</p>
+        </Link>
         <p className="text-black font-medium">Profile</p>
         <Avatar avatar={user?.avatar_url} />
       </div>

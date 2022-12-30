@@ -4,19 +4,21 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 3000",
+    "dev": "vite --port 3001",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint src/**/*.ts"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.7",
     "@supabase/supabase-js": "^2.2.2",
+    "@tanstack/react-query": "^4.20.4",
     "framer-motion": "^8.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-hot-toast": "^2.4.0",
     "react-icons": "^4.7.1",
     "react-router-dom": "^6.6.1",
+    "react-toastify": "^9.1.1",
     "uuid": "^9.0.0",
     "zustand": "^4.1.5"
   },

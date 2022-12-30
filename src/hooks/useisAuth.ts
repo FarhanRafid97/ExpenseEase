@@ -4,12 +4,8 @@ import { useEffect } from 'react';
 
 export const useIsAuth = () => {
   const login = useUser((state) => state.login);
-  const user = useUser((state) => state.user);
 
   useEffect(() => {
-    if (user) {
-      return;
-    }
     const getUser = async () => {
       try {
         const { data, error } = await supabase.auth.getUser();
@@ -19,7 +15,7 @@ export const useIsAuth = () => {
           return;
         }
         if (user?.user_metadata) {
-          login({ ...user.user_metadata });
+          login({ ...user.user_metadata, id: user.id });
         }
       } catch (error) {
         console.log('fail');
