@@ -1,7 +1,10 @@
 import feature from '@/dummy/feature.json';
 import ButtonLink from '@/components/Button/ButtonLink';
+import { useUser } from '@/store/user';
 
 const Home: React.FC = () => {
+  const user = useUser((state) => state.user);
+  console.log(user);
   return (
     <div className="flex flex-col gap-[15px]">
       <h1 className="gardient-title ">Welcome To Our Expense Tracking App!</h1>
@@ -30,7 +33,7 @@ const Home: React.FC = () => {
         </p>
       </div>
       <div>
-        <ButtonLink label="Sign Up Now &nbsp;🚀 " outlined={false} to="/login" />
+        {!user && <ButtonLink label="Sign Up Now &nbsp;🚀 " outlined={false} to="/login" />}
       </div>
     </div>
   );

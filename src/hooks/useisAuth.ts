@@ -6,22 +6,22 @@ export const useIsAuth = () => {
   const login = useUser((state) => state.login);
 
   useEffect(() => {
+    let ignore = false;
     const getUser = async () => {
       try {
         const { data, error } = await supabase.auth.getUser();
         const { user } = data;
-        if (error !== null) {
-          login(false);
+        if (ignore) {
           return;
         }
-        if (user?.user_metadata) {
-          login({ ...user.user_metadata, id: user.id });
-        }
+        error !== null ? login(false) : login({ ...user?.user_metadata, id: user?.id });
       } catch (error) {
-        console.log('fail');
         login(false);
       }
     };
     getUser();
+    return () => {
+      ignore = true;
+    };
   }, []);
 };

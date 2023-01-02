@@ -1,13 +1,15 @@
 import { snakeCase } from '@/hooks/snakeCase';
+import { addExpense } from '@/service/supabase';
+import { useUser } from '@/store/user';
 import { angkaTerbilang } from '@/utils/spellingNumber';
-import { succesToast } from '@/utils/toastOption';
 import { Dialog, Transition } from '@headlessui/react';
-import { AiOutlineClose } from 'react-icons/ai';
+import { InputExpenseData } from 'expense-app';
 import { Fragment, useEffect, useState } from 'react';
+import { AiOutlineClose } from 'react-icons/ai';
 import { GiExpense, GiMoneyStack } from 'react-icons/gi';
-import { toast } from 'react-toastify';
 import Button from './Button/Button';
 import Input from './Input';
+import { CgSpinnerTwoAlt } from 'react-icons/cg';
 import MyListbox from './MyListBox';
 
 interface MyModal {
@@ -17,21 +19,45 @@ interface MyModal {
 const currency = ['IDR', '$Dolar'];
 
 const MyModal: React.FC<MyModal> = ({ isOpen, setIsOpen }) => {
-  const [expenseData, setExpenseData] = useState({ expense_name: '', amount: 0, currency: '' });
+  const [expenseData, setExpenseData] = useState<InputExpenseData>({
+    expense_name: '',
+    amount: 0,
+    currency: '',
+  });
+  const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(currency[0]);
 
   function closeModal() {
     setIsOpen(false);
   }
+  const user = useUser((state) => state.user);
+  console.log(user);
 
   useEffect(() => {
     setExpenseData({ ...expenseData, currency: selected });
   }, [selected]);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    toast.success('Expense Plan Created', succesToast);
-    console.log(expenseData);
+    setLoading(true);
+    try {
+      const data = await addExpense({ ...expenseData, id: user?.id });
+      console.log(data);
+      resetState();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetState = () => {
+    setSelected(currency[0]);
+    setExpenseData({
+      amount: 0,
+      expense_name: '',
+      currency: currency[0],
+    });
   };
 
   return (
@@ -85,6 +111,7 @@ const MyModal: React.FC<MyModal> = ({ isOpen, setIsOpen }) => {
                             }
                             placeholder="June Coffe Expense"
                             icon={<GiExpense />}
+                            required
                           />
                         </label>
                         <div>
@@ -99,12 +126,12 @@ const MyModal: React.FC<MyModal> = ({ isOpen, setIsOpen }) => {
                           <span> Amount</span>
                           <Input
                             type="text"
+                            required
                             placeholder="0"
                             value={Number(expenseData.amount).toLocaleString()}
                             onChange={(e) => {
-                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                              const noComma: any = e.target.value.split('.').join('');
-                              if (isNaN(noComma + 1)) {
+                              const noComma = e.target.value.split('.').join('');
+                              if (isNaN(Number(noComma))) {
                                 return;
                               }
                               if (Number(noComma) > 1000000000) {
@@ -124,18 +151,21 @@ const MyModal: React.FC<MyModal> = ({ isOpen, setIsOpen }) => {
                         <div className="flex gap-2 justify-end">
                           <Button
                             type="button"
+                            disabled={loading}
+                            label="Reset"
                             onClick={() => {
-                              setSelected(currency[0]);
-                              setExpenseData({
-                                amount: 0,
-                                expense_name: '',
-                                currency: currency[0],
-                              });
+                              resetState();
                             }}
-                            placeholder="Reset"
                             typeButton="outlined"
                           />
-                          <Button type="submit" placeholder="Submit" typeButton="normal" />
+                          <Button
+                            type="submit"
+                            disabled={loading}
+                            label={
+                              loading ? <CgSpinnerTwoAlt className="animate-spin" /> : 'Submit'
+                            }
+                            typeButton="normal"
+                          />
                         </div>
                       </div>
                     </form>

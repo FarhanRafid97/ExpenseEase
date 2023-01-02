@@ -1,4 +1,7 @@
+import { succesToast } from '@/utils/toastOption';
 import { createClient } from '@supabase/supabase-js';
+import { MyExpenseType } from 'expense-app';
+import { toast } from 'react-toastify';
 
 export const supabase = createClient(
   import.meta.env.VITE_APP_SUPABASE_URL,
@@ -14,21 +17,38 @@ export async function signout() {
   return await supabase.auth.signOut();
 }
 
-export const getExpense = async (id: string) => {
+export const getExpense = async (id: string): Promise<MyExpenseType[] | []> => {
+  if (!id) {
+    return [];
+  }
+  try {
+    const response = await supabase.from('expense').select('*').eq('user_id', id);
+
+    if (response.error) {
+      return [];
+    }
+
+    return response.data as MyExpenseType[];
+  } catch (e) {
+    return [];
+  }
+};
+export const addExpense = async (payload: MyExpenseType) => {
+  const { amount, currency, expense_name, id } = payload;
   try {
     const response = await supabase
       .from('expense')
-      .insert({ expense_name: 'test-farhan', amount: 500000, user_id: id, currency: 'IDR' })
+      .insert({ expense_name, amount, user_id: id, currency })
       .returns();
 
     if (response.error) {
-      console.log(response.error);
+      toast.error('Expense Plan Created', succesToast);
+      return;
     }
-    console.log(response);
+    toast.success('Expense Plan Created', succesToast);
+
     return response.data;
   } catch (e) {
-    console.log(e);
-
     return null;
   }
 };
