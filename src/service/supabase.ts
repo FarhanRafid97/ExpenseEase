@@ -22,7 +22,11 @@ export const getExpense = async (id: string): Promise<MyExpenseType[]> => {
     return [];
   }
   try {
-    const response = await supabase.from('expense').select('*').eq('user_id', id);
+    const response = await supabase
+      .from('expense')
+      .select('*')
+      .eq('user_id', id)
+      .order('id', { ascending: false });
 
     if (response.error) {
       return [];
@@ -51,4 +55,26 @@ export const addExpense = async (payload: InputExpenseData): Promise<MyExpenseTy
   } catch (e) {
     return null;
   }
+};
+
+export const updateExpense = async (payload: MyExpenseType, userId: string): Promise<boolean> => {
+  if (userId) {
+    try {
+      const response = await supabase
+        .from('expense')
+        .update(payload)
+        .eq('id', payload.id as string);
+
+      if (response.error) {
+        console.log(response.error);
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.log(e);
+
+      return false;
+    }
+  }
+  return false;
 };

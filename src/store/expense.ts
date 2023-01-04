@@ -6,6 +6,7 @@ export interface MyExpenseHook {
   myExpense: MyExpenseType[];
   addExpenseState: (data: MyExpenseType) => void;
   orderExpense: (data: MyExpenseType[]) => void;
+  editExpense: (data: MyExpenseType) => void;
 }
 export const useExpenseState = create<MyExpenseHook>(
   (set): MyExpenseHook => ({
@@ -18,5 +19,12 @@ export const useExpenseState = create<MyExpenseHook>(
       set(() => ({
         myExpense: data,
       })),
+    editExpense: (data: MyExpenseType) =>
+      set((state) => {
+        const indexDataExpense = state.myExpense.findIndex((d) => d.id === data.id);
+        const dataState = state.myExpense;
+        dataState[indexDataExpense] = data;
+        return { myExpense: dataState };
+      }),
   }),
 );

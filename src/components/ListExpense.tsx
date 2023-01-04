@@ -1,8 +1,12 @@
+import { updateExpense } from '@/service/supabase';
+import { useExpenseState } from '@/store/expense';
+import { useUser } from '@/store/user';
 import { snakeCase } from '@/utils/snakeCase';
 import { convertTimestamp } from '@/utils/timestamp';
 import { MyExpenseType } from 'expense-app';
 import { useState } from 'react';
 import { AiOutlineEdit, AiOutlineCheck } from 'react-icons/ai';
+import { ImSpinner10 } from 'react-icons/im';
 import { FcCancel } from 'react-icons/fc';
 interface ListExpenseProps {
   myExpenses: MyExpenseType[];
@@ -11,6 +15,9 @@ interface ListExpenseProps {
 const ListExpense: React.FC<ListExpenseProps> = ({ myExpenses }) => {
   const [editId, setEditId] = useState('');
   const [editName, setEditName] = useState('');
+  const user = useUser((state) => state.user);
+  const [loading, setLoading] = useState(false);
+  const { editExpense } = useExpenseState();
   return (
     <div className="flex flex-col gap-4 mt-4 ">
       {myExpenses?.map((expense) => (
@@ -26,7 +33,7 @@ const ListExpense: React.FC<ListExpenseProps> = ({ myExpenses }) => {
               ) : (
                 <input
                   type="text"
-                  className="border-b-2 focus:outline-none"
+                  className="border-b-2 focus:outline-none w-2/4"
                   onChange={(e) => setEditName(e.target.value)}
                   value={snakeCase(editName)}
                 />
@@ -40,12 +47,23 @@ const ListExpense: React.FC<ListExpenseProps> = ({ myExpenses }) => {
                 >
                   <AiOutlineEdit />
                 </button>
+              ) : loading ? (
+                <ImSpinner10 className="animate-spin text-xl " />
               ) : (
                 <div className="text-lg flex gap-2">
                   <button
-                    onClick={() => {
-                      setEditName(expense.expense_name);
-                      setEditId(expense.id as string);
+                    onClick={async () => {
+                      setLoading(true);
+                      const isUpdate = await updateExpense(
+                        { ...expense, expense_name: editName },
+                        user.id,
+                      );
+                      if (isUpdate) {
+                        editExpense({ ...expense, expense_name: editName });
+                        setEditId('');
+                        setEditName('');
+                      }
+                      setLoading(false);
                     }}
                     className="text-green-500"
                   >

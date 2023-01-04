@@ -33,7 +33,8 @@ const Home: React.FC = () => {
         </p>
       </div>
       <div>
-        {!user && <ButtonLink label="Sign Up Now &nbsp;🚀 " outlined={false} to="/login" />}
+        {user === null ||
+          (!user && <ButtonLink label="Sign Up Now &nbsp;🚀 " outlined={false} to="/login" />)}
       </div>
     </div>
   );
