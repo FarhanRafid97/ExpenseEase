@@ -1,6 +1,6 @@
 import { succesToast } from '@/utils/toastOption';
 import { createClient } from '@supabase/supabase-js';
-import { MyExpenseType } from 'expense-app';
+import { InputExpenseData, MyExpenseType } from 'expense-app';
 import { toast } from 'react-toastify';
 
 export const supabase = createClient(
@@ -17,7 +17,7 @@ export async function signout() {
   return await supabase.auth.signOut();
 }
 
-export const getExpense = async (id: string): Promise<MyExpenseType[] | []> => {
+export const getExpense = async (id: string): Promise<MyExpenseType[]> => {
   if (!id) {
     return [];
   }
@@ -33,21 +33,21 @@ export const getExpense = async (id: string): Promise<MyExpenseType[] | []> => {
     return [];
   }
 };
-export const addExpense = async (payload: MyExpenseType) => {
+export const addExpense = async (payload: InputExpenseData): Promise<MyExpenseType | null> => {
   const { amount, currency, expense_name, id } = payload;
   try {
     const response = await supabase
       .from('expense')
       .insert({ expense_name, amount, user_id: id, currency })
-      .returns();
+      .select();
 
     if (response.error) {
       toast.error('Expense Plan Created', succesToast);
-      return;
+      return null;
     }
     toast.success('Expense Plan Created', succesToast);
 
-    return response.data;
+    return response.data[0] as MyExpenseType;
   } catch (e) {
     return null;
   }

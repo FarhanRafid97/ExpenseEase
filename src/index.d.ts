@@ -15,10 +15,11 @@ declare module 'expense-app' {
   export type InputExpenseData = {
     expense_name: string;
     currency: string;
+    id?: string;
     amount: number;
   };
   export interface MyExpenseType extends InputExpenseData {
-    id: string;
     user_ud?: string;
+    created_at: string;
   }
 }

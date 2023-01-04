@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getExpense } from '@/service/supabase';
 import { useUser } from '@/store/user';
-import { MyExpenseType } from 'expense-app';
+
+import { useExpenseState } from '@/store/expense';
 
 export const useMyExpense = () => {
-  const [myExpenses, setMyExpenses] = useState<MyExpenseType[] | []>([]);
+  const myExpenses = useExpenseState((state) => state.myExpense);
+  const orderExpense = useExpenseState((state) => state.orderExpense);
+  const addExpenseState = useExpenseState((state) => state.addExpenseState);
 
   const user = useUser((state) => state.user);
 
@@ -17,7 +20,7 @@ export const useMyExpense = () => {
     const getdata = async () => {
       const responseMyExpense = await getExpense(user?.id);
       if (!ignore) {
-        setMyExpenses(responseMyExpense);
+        orderExpense(responseMyExpense);
       }
     };
     getdata();
@@ -26,5 +29,5 @@ export const useMyExpense = () => {
       ignore = true;
     };
   }, [user]);
-  return { myExpenses };
+  return { myExpenses, orderExpense, addExpenseState };
 };

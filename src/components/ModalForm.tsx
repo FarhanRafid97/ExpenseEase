@@ -1,4 +1,4 @@
-import { snakeCase } from '@/hooks/snakeCase';
+import { snakeCase } from '@/utils/snakeCase';
 import { addExpense } from '@/service/supabase';
 import { useUser } from '@/store/user';
 import { angkaTerbilang } from '@/utils/spellingNumber';
@@ -11,6 +11,7 @@ import Button from './Button/Button';
 import Input from './Input';
 import { CgSpinnerTwoAlt } from 'react-icons/cg';
 import MyListbox from './MyListBox';
+import { useMyExpense } from '@/hooks/useGetMyExpense';
 
 interface MyModal {
   isOpen: boolean;
@@ -24,6 +25,7 @@ const MyModal: React.FC<MyModal> = ({ isOpen, setIsOpen }) => {
     amount: 0,
     currency: '',
   });
+  const { addExpenseState } = useMyExpense();
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState(currency[0]);
 
@@ -31,7 +33,6 @@ const MyModal: React.FC<MyModal> = ({ isOpen, setIsOpen }) => {
     setIsOpen(false);
   }
   const user = useUser((state) => state.user);
-  console.log(user);
 
   useEffect(() => {
     setExpenseData({ ...expenseData, currency: selected });
@@ -43,6 +44,10 @@ const MyModal: React.FC<MyModal> = ({ isOpen, setIsOpen }) => {
     try {
       const data = await addExpense({ ...expenseData, id: user?.id });
       console.log(data);
+      console.log('data');
+      if (data !== null) {
+        addExpenseState(data);
+      }
       resetState();
     } catch (error) {
       console.log(error);
