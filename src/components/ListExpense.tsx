@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { AiOutlineEdit, AiOutlineCheck } from 'react-icons/ai';
 import { ImSpinner10 } from 'react-icons/im';
 import { FcCancel } from 'react-icons/fc';
+import { BsTrash } from 'react-icons/bs';
 interface ListExpenseProps {
   myExpenses: MyExpenseType[];
 }
@@ -18,8 +19,9 @@ const ListExpense: React.FC<ListExpenseProps> = ({ myExpenses }) => {
   const user = useUser((state) => state.user);
   const [loading, setLoading] = useState(false);
   const { editExpense } = useExpenseState();
+
   return (
-    <div className="flex flex-col gap-4 mt-4 ">
+    <div className="flex flex-col gap-6 mt-4 ">
       {myExpenses?.map((expense) => (
         <li
           key={expense.id}
@@ -27,7 +29,7 @@ const ListExpense: React.FC<ListExpenseProps> = ({ myExpenses }) => {
         >
           <div>
             <div className="flex gap-2">
-              <p>{expense.id}</p>
+              <p>{expense.id} </p>
               {editId !== expense.id ? (
                 <p>{snakeCase(expense.expense_name)} </p>
               ) : (
@@ -83,8 +85,11 @@ const ListExpense: React.FC<ListExpenseProps> = ({ myExpenses }) => {
             </div>
             <p className="text-sm">{convertTimestamp(expense.created_at)}</p>
           </div>
-          <div>
+          <div className="flex gap-2 items-center">
             <p>{expense.amount.toLocaleString()}</p>
+            <div className="p-2 bg-myred text-white text-xl rounded-md hover:cursor-pointer hover:opacity-70">
+              <BsTrash />
+            </div>
           </div>
         </li>
       ))}

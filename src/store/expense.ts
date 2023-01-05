@@ -7,17 +7,22 @@ export interface MyExpenseHook {
   addExpenseState: (data: MyExpenseType) => void;
   orderExpense: (data: MyExpenseType[]) => void;
   editExpense: (data: MyExpenseType) => void;
+  paginationExpense: (data: MyExpenseType[]) => void;
 }
 export const useExpenseState = create<MyExpenseHook>(
   (set): MyExpenseHook => ({
     myExpense: [],
     addExpenseState: (data: MyExpenseType) =>
       set((state) => ({
-        myExpense: [...state.myExpense, data],
+        myExpense: [data, ...state.myExpense],
       })),
     orderExpense: (data) =>
       set(() => ({
         myExpense: data,
+      })),
+    paginationExpense: (data) =>
+      set((state) => ({
+        myExpense: [...state.myExpense, ...data],
       })),
     editExpense: (data: MyExpenseType) =>
       set((state) => {

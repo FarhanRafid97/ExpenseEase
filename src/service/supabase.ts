@@ -17,7 +17,19 @@ export async function signout() {
   return await supabase.auth.signOut();
 }
 
-export const getExpense = async (id: string): Promise<MyExpenseType[]> => {
+export const getPagination = (page: number, size: number) => {
+  const limit = size ? +size : 3;
+  const from = page ? page * limit : 0;
+  const to = page ? from + size : size;
+
+  return { from, to };
+};
+
+export const getExpense = async (
+  id: string,
+  from: number,
+  to: number,
+): Promise<MyExpenseType[]> => {
   if (!id) {
     return [];
   }
@@ -26,7 +38,8 @@ export const getExpense = async (id: string): Promise<MyExpenseType[]> => {
       .from('expense')
       .select('*')
       .eq('user_id', id)
-      .order('id', { ascending: false });
+      .order('id', { ascending: false })
+      .range(from, to);
 
     if (response.error) {
       return [];
